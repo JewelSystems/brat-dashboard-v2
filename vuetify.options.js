@@ -1,6 +1,12 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
+import pt from 'vuetify/es5/locale/pt';
+import en from 'vuetify/es5/locale/en';
 
 export default {
+    lang: {
+        locales: { en, pt },
+        current: 'pt',
+    },
     theme: {
         dark: true,
         themes: {

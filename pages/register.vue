@@ -8,24 +8,6 @@
       <v-spacer />
     </v-card-title>
     <v-form ref="loginForm" v-model="valid" lazy-validation>
-      <v-row class="mx-8" dense no-gutters justify="space-between">
-        <v-col md="5" cols="12">
-          <v-text-field
-            v-model="registerData.first_name"
-            label="Nome"
-            :rules="[v => !!v || 'Nome não pode estar vazio!']"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col md="5" cols="12">
-          <v-text-field
-            v-model="registerData.last_name"
-            label="Sobrenome"
-            :rules="[v => !!v || 'Sobrenome não pode estar vazio!']"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
       <v-text-field
         v-model="registerData.username"
         label="Usuário"
@@ -46,7 +28,10 @@
       ></v-text-field>
       <v-text-field
         v-model="registerData.password2"
-        :rules="[v => (v && v.length >= 8) || 'Senha precisa de pelo menos 8 caractéres!']"
+        :rules="[
+        v => (v && v.length >= 8) || 'Senha precisa de pelo menos 8 caractéres!',
+        v => (v === registerData.password1) || 'As senhas não são iguais!',
+        ]"
         :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
         :type="showPass ? 'text' : 'password'"
         label="Confirmação de senha"
@@ -60,11 +45,29 @@
         label="E-mail"
         :rules="[
           v => !!v || 'Email não pode estar vazio!',
-          v => /.+@.+\..+/.test(v) || 'E-mail precisa ter um formato válido',
+          v => /.+@.+\..+/.test(v) || 'E-mail precisa ter um formato válido (ex:fulano@provedor.cdn)',
         ]"
         required
         class="mx-8"
       ></v-text-field>
+      <v-row class="mx-8" dense no-gutters justify="space-between">
+        <v-col md="6" cols="12">
+          <v-text-field
+            v-model="registerData.first_name"
+            label="Nome"
+            :rules="[v => !!v || 'Nome não pode estar vazio!']"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col md="5" cols="12">
+          <v-text-field
+            v-model="registerData.last_name"
+            label="Sobrenome"
+            :rules="[v => !!v || 'Sobrenome não pode estar vazio!']"
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
       <v-row class="mx-8" dense no-gutters justify="space-between">
         <v-col md="6" cols="8">
           <v-text-field
@@ -74,7 +77,7 @@
             required
           ></v-text-field>
         </v-col>
-        <v-col md="4" cols="3">
+        <v-col md="5" cols="3">
           <v-select
             v-model="registerData.gender"
             :items="genderOptions"
@@ -83,23 +86,60 @@
         </v-col>
       </v-row>
       <v-row class="mx-8" dense no-gutters justify="space-between">
-        <v-col md="6" cols="8">
+        <v-col md="6" cols="12">
           <v-text-field
             v-model="registerData.birthday"
+            v-mask = "'####/##/##'"
             label="Data de nascimento"
-            :rules="[
-              v => !!v || 'Data de nascimento não pode estar vazia!',
-              
-            ]"
-            hint="DD/MM/YYYY"
+            :rules="[v => !!v || 'Data de nascimento não pode estar vazia!',]"
+            hint="AAAA/MM/DD"
             required
           ></v-text-field>
         </v-col>
-        <v-col md="4" cols="3">
-          <v-select
-            :items="genderOptions"
-            label="Gênero"
-          ></v-select>
+        <v-col md="5" cols="12">
+          <v-text-field
+            v-model="registerData.phone_number"
+            v-mask ="phoneMask"
+            label="Número de telefone"
+            :rules="[v => v.length > 14 || 'Número de telefone inválido',]"
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-text-field
+        v-model="registerData.stream_link"
+        label="Link de transmissão"
+        :rules="[v => v.length > 22 || 'Insira um link de transmissão válido']"
+        placeholder="https://www.twitch.tv/"
+        required
+        class="mx-8"
+      ></v-text-field>
+      <v-row class="mx-8" dense no-gutters justify="space-between">
+        <v-col md="5" cols="12">
+          <v-text-field
+            v-model="registerData.youtube"
+            label="YouTube"
+          ></v-text-field>
+        </v-col>
+        <v-col md="5" cols="12">
+          <v-text-field
+            v-model="registerData.twitter"
+            label="Twitter"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row class="mx-8" dense no-gutters justify="space-between">
+        <v-col md="5" cols="12">
+          <v-text-field
+            v-model="registerData.facebook"
+            label="Facebook"
+          ></v-text-field>
+        </v-col>
+        <v-col md="5" cols="12">
+          <v-text-field
+            v-model="registerData.instagram"
+            label="Instagram"
+          ></v-text-field>
         </v-col>
       </v-row>
     </v-form>
@@ -117,6 +157,7 @@ export default Vue.extend({
   data() {
     const valid:boolean = false
     const showPass:boolean = false
+    const phoneMask: string = '(##) ####-####'
     const registerData = {
       first_name: '',
       last_name: '',
@@ -128,7 +169,7 @@ export default Vue.extend({
       phone_number: '',
       password1: '',
       password2: '',
-      stream_link: '',
+      stream_link: 'https://www.twitch.tv/',
       twitch: 'https://www.twitch.tv/',
       twitter: 'https://twitter.com/',
       facebook: 'https://www.facebook.com/',
@@ -142,11 +183,22 @@ export default Vue.extend({
         { text: 'Outro', value: 'O' }
       ]
     return{
+      phoneMask,
       valid,
       showPass,
       registerData,
       genderOptions
     }
   },
+  watch: {
+    'registerData.phone_number' (newPhone):string {
+      if (newPhone.length > 14 ) {
+        return (this.phoneMask = '(##) #####-####')
+      }
+      else{
+        return (this.phoneMask = '(##) ####-####')
+      }
+    }
+  }
 })
 </script>
