@@ -49,17 +49,9 @@ export default Vue.extend({
         return this.$store.state.userSettings.bDarkMode
       },
       set (e) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        this.$vuetify.theme.dark = e;
         this.$store.commit('userSettings/setDarkMode', e)
       }
     },
   },
-  methods: {
-    toggleDarkMode(){
-      this.$vuetify.theme.dark = this.dark;
-      this.$store.commit('userSettings/setDarkMode', this.dark)
-    }
-  }
 })
 </script>

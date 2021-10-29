@@ -1,5 +1,5 @@
 <template>
-  <v-app light>
+  <v-app>
     <NavBar />
     <v-main>
       <v-container>
@@ -16,6 +16,17 @@
 
 <script>
 export default {
-  
+  computed:{
+    dark: {
+      get () {
+        return this.$store.state.userSettings.bDarkMode
+      },
+    },
+  },
+  watch: {
+    dark (newDark) {
+      this.$vuetify.theme.dark = newDark
+    }
+  }
 }
 </script>
