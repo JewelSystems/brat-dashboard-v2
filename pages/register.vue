@@ -76,6 +76,27 @@
         </v-col>
         <v-col md="4" cols="3">
           <v-select
+            v-model="registerData.gender"
+            :items="genderOptions"
+            label="Gênero"
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row class="mx-8" dense no-gutters justify="space-between">
+        <v-col md="6" cols="8">
+          <v-text-field
+            v-model="registerData.birthday"
+            label="Data de nascimento"
+            :rules="[
+              v => !!v || 'Data de nascimento não pode estar vazia!',
+              
+            ]"
+            hint="DD/MM/YYYY"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col md="4" cols="3">
+          <v-select
             :items="genderOptions"
             label="Gênero"
           ></v-select>
