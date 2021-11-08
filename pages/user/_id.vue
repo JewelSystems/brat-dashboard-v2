@@ -90,7 +90,7 @@ export default Vue.extend({
         this.loading = true
         const fetchData = await this.$axios.$get('/user/'+this.$data.userId)
         this.userInfo = fetchData.res[0]
-        console.log(this.userInfo)
+        // console.log(this.userInfo)
         this.loading = false
     }
 })

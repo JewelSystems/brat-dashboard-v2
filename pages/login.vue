@@ -58,7 +58,7 @@ export default Vue.extend({
       const password = this.loginData.password
       const loggedIn = await this.$store.dispatch('userSettings/login', { username, password })
       if (loggedIn.error){
-        return console.log(loggedIn)
+        // return console.log(loggedIn)
       }
       else{
         this.$router.push('/')
