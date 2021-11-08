@@ -7,7 +7,7 @@
       </div>
       <v-spacer />
     </v-card-title>
-    <v-form ref="loginForm" v-model="valid" lazy-validation>
+    <v-form ref="loginForm" v-model="valid" lazy-validation @submit="login" @keyup.native.enter="login">
       <v-text-field
         v-model="loginData.username"
         label="Usuário"
@@ -28,15 +28,16 @@
       ></v-text-field>
     </v-form>
     <v-card-actions>
-      <v-btn text color="primary" :to="'/register'">Registro</v-btn>
+      <v-btn text color="primary" :to="'/signup'">Registro</v-btn>
       <v-spacer />
-      <v-btn color="primary" :disabled="!valid">Login</v-btn>
+      <v-btn color="primary" :disabled="!valid" @click="login">Login</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
   data() {
     const valid:boolean = false
@@ -53,17 +54,16 @@ export default Vue.extend({
   },
   methods: {
     async login(){
-      const response = await this.$axios.$post('/login', {
-        username: this.loginData.username,
-        password: this.loginData.password,
-      }).catch(function (error){
-        if(error.response){
-          return error.response;
-        }
-      });
-      // console.log(response);
-      return response;
-    },
+      const username = this.loginData.username
+      const password = this.loginData.password
+      const loggedIn = await this.$store.dispatch('userSettings/login', { username, password })
+      if (loggedIn.error){
+        return console.log(loggedIn)
+      }
+      else{
+        this.$router.push('/')
+      }
     }
+  }
 })
 </script>

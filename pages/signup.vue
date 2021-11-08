@@ -7,7 +7,7 @@
       </div>
       <v-spacer />
     </v-card-title>
-    <v-form ref="loginForm" v-model="valid" lazy-validation>
+    <v-form ref="signUpForm" v-model="valid" lazy-validation @submit="submit">
       <v-text-field
         v-model="registerData.username"
         label="Usuário"
@@ -89,10 +89,10 @@
         <v-col md="6" cols="12">
           <v-text-field
             v-model="registerData.birthday"
-            v-mask = "'####/##/##'"
+            v-mask = "'####-##-##'"
             label="Data de nascimento"
             :rules="[v => !!v || 'Data de nascimento não pode estar vazia!',]"
-            hint="AAAA/MM/DD"
+            hint="AAAA-MM-DD"
             required
           ></v-text-field>
         </v-col>
@@ -146,7 +146,7 @@
     <v-card-actions>
       <v-btn text color="primary" :to="'/login'">Login</v-btn>
       <v-spacer />
-      <v-btn color="primary" :disabled="!valid">Cadastrar</v-btn>
+      <v-btn color="primary" :disabled="!valid" type="submit">Cadastrar</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -155,9 +155,9 @@
 import Vue from 'vue'
 export default Vue.extend({
   data() {
-    const valid:boolean = false
-    const showPass:boolean = false
-    const phoneMask: string = '(##) ####-####'
+    const valid: boolean = false
+    const showPass: boolean = false
+    const phoneMask: string = '+##(##)####-####'
     const registerData = {
       first_name: '',
       last_name: '',
@@ -191,13 +191,42 @@ export default Vue.extend({
     }
   },
   watch: {
-    'registerData.phone_number' (newPhone):string {
-      if (newPhone.length > 14 ) {
-        return (this.phoneMask = '(##) #####-####')
+    'registerData.phone_number' (newPhone): string {
+      if (newPhone.length > 16 ) {
+        return (this.phoneMask = '+##(##)#####-####')
       }
       else{
-        return (this.phoneMask = '(##) ####-####')
+        return (this.phoneMask = '+##(##)####-####')
       }
+    }
+  },
+  methods: {
+    async submit(){
+      this.registerData.twitch = this.registerData.stream_link
+      const response = await this.$axios.$post('/user', {
+        first_name: this.registerData.first_name,
+        last_name: this.registerData.last_name,
+        username: this.registerData.username,
+        nickname: this.registerData.nickname,
+        email: this.registerData.email,
+        gender: this.registerData.gender,
+        birthday: this.registerData.birthday,
+        phone_number: this.registerData.phone_number,
+        password: this.registerData.password1,
+        stream_link: this.registerData.stream_link,
+        twitch: this.registerData.twitch,
+        twitter: this.registerData.twitter,
+        facebook: this.registerData.facebook,
+        instagram: this.registerData.instagram,
+        youtube: this.registerData.youtube,
+      } ).catch(function(error){
+        if (error.response){
+          // console.log(error.response)
+          return error.response
+        }
+      })
+      // console.log(response)
+      return response
     }
   }
 })

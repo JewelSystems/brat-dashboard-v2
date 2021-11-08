@@ -17,14 +17,17 @@ export default {
     ]
   },
 
+  layoutTransition: 'transition',
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/assets/main.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     {src: '~/plugins/vuex-persist', ssr: false},
-    '~/plugins/v-mask.js',
+    {src: '~/plugins/v-mask.js', ssr:true},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -57,5 +60,17 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+  
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.BROWSER_BASE_URL
+    }
+  },
+
+  privateRuntimeConfig: {
+    axios: {
+      baseURL: process.env.BASE_URL
+    }
+  },
 }

@@ -10,31 +10,37 @@
       <v-navigation-drawer
         v-model="drawer"
         absolute
+        height="100vh"
         temporary
+        class="mx-auto"
       >
         <v-list nav dense>
-          <v-list-item-group
-            v-for="item in routes" :key='item.name'
-          >
-              <v-list-item :to=item.route style="margin-bottom: 2px">
-                  <v-list-item-title>{{item.name}}</v-list-item-title>
-              </v-list-item>
-          </v-list-item-group>
+          <v-list-item v-for="item in routes" :key='item.name' link :to=item.route>
+            <v-list-item-content style="margin-bottom: 2px">
+              <v-list-item-title>{{item.name}}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
-        <v-row justify="center"><v-icon class="mr-3">mdi-white-balance-sunny</v-icon><v-switch v-model="dark" dense flat ></v-switch><v-icon>mdi-weather-night</v-icon></v-row>
+        <template v-slot:append>
+          <div class="pa-2">
+            <v-row justify="center"><v-icon class="mr-3">mdi-white-balance-sunny</v-icon><v-switch v-model="dark" dense flat ></v-switch><v-icon>mdi-weather-night</v-icon></v-row>
+            <v-btn v-if="auth" block @click.stop="logout">Logout</v-btn>
+          </div>
+        </template>
       </v-navigation-drawer>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import {mapGetters} from 'vuex'
+
 export default Vue.extend({
   data () {
     const title: string = 'BrAT';
     const drawer: boolean = false;
     const routes = [
         {name: 'Home', route: '/'},
-        {name: 'Inspire', route: '/inspire'},
         {name: 'Login', route: '/login'}
     ]
     return{
@@ -44,12 +50,21 @@ export default Vue.extend({
     }
   },
   computed:{
+    ...mapGetters("userSettings", [
+            'userData',
+            'auth'
+        ]),
+        logout(){
+            this.$store.dispatch('userSettings/logout')
+            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+            return this.$router.push('/')
+        },
     dark: {
       get () {
         return this.$store.state.userSettings.bDarkMode
       },
-      set (e) {
-        this.$store.commit('userSettings/setDarkMode', e)
+      set (i) {
+        this.$store.commit('userSettings/setDarkMode', i)
       }
     },
   },
