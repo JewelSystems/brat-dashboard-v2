@@ -5,7 +5,8 @@ export default ({ store }) => {
   window.onNuxtReady(() => {
     new VuexPersistence({
       /* your options */
-      key: 'brat_vuex'
+      key: 'brat_vuex',
+      modules: ['userSettings']
     }).plugin(store);
   });
 };

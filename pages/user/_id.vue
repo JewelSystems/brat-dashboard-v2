@@ -73,7 +73,7 @@ export default Vue.extend({
                 {name: 'jogo 1', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'},
                 {name: 'jogo 2', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'},
                 {name: 'jogo 3', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'}
-            ] },
+            ]},
             { name: 'event_b',  content: [
                 {name: 'jogo 1', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'},
                 {name: 'jogo 2', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'}

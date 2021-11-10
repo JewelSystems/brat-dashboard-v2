@@ -41,7 +41,8 @@ export default Vue.extend({
     const drawer: boolean = false;
     const routes = [
         {name: 'Home', route: '/'},
-        {name: 'Login', route: '/login'}
+        {name: 'Usuários', route: '/users'},
+        {name: 'Eventos', route: '/events'},
     ]
     return{
       drawer,

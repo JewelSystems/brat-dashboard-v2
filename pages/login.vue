@@ -61,6 +61,8 @@ export default Vue.extend({
         // return console.log(loggedIn)
       }
       else{
+        const wsPayload = {"endpoint":"login", "id":this.$store.state.userSettings.userData.id, "info":{"token": this.$store.state.userSettings.userData.jwt}};
+        this.$store.commit('wss/SOCKET_SEND', wsPayload);
         this.$router.push('/')
       }
     }
