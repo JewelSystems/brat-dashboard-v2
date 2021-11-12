@@ -24,6 +24,7 @@
         <template #append>
           <div class="pa-2">
             <v-row justify="center"><v-icon class="mr-3">mdi-white-balance-sunny</v-icon><v-switch v-model="dark" dense flat ></v-switch><v-icon>mdi-weather-night</v-icon></v-row>
+            <v-btn v-if="!auth" block to="/login">Login</v-btn>
             <v-btn v-if="auth" block @click.stop="logout">Logout</v-btn>
           </div>
         </template>
@@ -58,7 +59,7 @@ export default Vue.extend({
         logout(){
             this.$store.dispatch('userSettings/logout')
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-            return this.$router.push('/')
+            return this.$nuxt.$options.router?.push('/')
         },
     dark: {
       get () {

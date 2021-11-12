@@ -2,34 +2,35 @@
     <div>
         <v-card
         :loading="loading"
-        class="mx-auto my-12 rounded-xl">
+        class="mx-auto my-12 rounded-l-xl"
+        max-width="1200px">
             <v-row no-gutters>
                 <v-col cols="12" md="4" >
-                    <v-img :src="'/userAvatars/'+userInfo.username+'.png'" height="100%" class="rounded-xl"></v-img>
+                    <v-img :src="'/userAvatars/'+userInfo.username+'.png' ? '/userAvatars/'+userInfo.username+'.png' : '/userAvatars/Redd.png' " height="100%" class="rounded-l-xl"></v-img>
                 </v-col>
                 <v-col cols="12" md="6" align-self="center">
                     <v-card-title primary-title>
-                        {{userInfo.username}} - {{userInfo.gender}}
+                        {{userInfo.username}} | {{userInfo.gender}}
                     </v-card-title>
                     <v-card-text class="card_text">
-                        Link de transmissão: {{userInfo.stream_link}}
+                        Link de transmissão: <a :href="userInfo.stream_link">{{userInfo.stream_link}}</a> 
                     </v-card-text>
                     <v-card-text class="card_text">
-                        Twitch: {{userInfo.twitch}}
+                        Twitch: <a :href="userInfo.twitch">{{userInfo.twitch}}</a> 
                     </v-card-text>
                     <v-card-text class="card_text">
-                        Youtube: {{userInfo.youtube}}
+                        Youtube: <a :href="userInfo.youtube">{{userInfo.youtube}}</a> 
                     </v-card-text>
                     <v-card-text class="card_text">
-                        Twitter: {{userInfo.twitter}}
+                        Twitter: <a :href="userInfo.twitter">{{userInfo.twitter}}</a>  
                     </v-card-text>
                     <v-card-text class="card_text">
-                        Intagram: {{userInfo.instagram}}
+                        Intagram: <a :href="userInfo.instagram">{{userInfo.instagram}}</a>  
                     </v-card-text>
                 </v-col>
             </v-row>
         </v-card>
-        <v-card>
+        <v-card class="mx-auto" max-width="1200px">
             <v-card-title primary-title class="mx-auto justify-center">
                 Eventos
             </v-card-title>
@@ -41,16 +42,34 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item  v-for="item  in events" :key="item.name">
-                    <v-card v-for="(content, j) in item.content" :key="j" flat class="mx-auto my-4" style="paddin-left: 4px">
-                        <v-row justify="space-between" class="ml-2">
-                            <v-col cols="8" md="6">{{content.name}}</v-col>
-                            <v-col cols="4" md="2">{{content.cat}}</v-col>
-                            <v-spacer></v-spacer>
-                            <v-col cols="6" md="2">est: {{content.estimate}}</v-col>
-                            <v-col cols="4" md="1"><a :href=content.vod>Link</a></v-col>
-                        </v-row>
-                        <v-divider class="my-1"></v-divider>
-                    </v-card>
+                    <v-simple-table>
+                        <template #default>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Jogo
+                                    </th>
+                                    <th>
+                                        Categoria
+                                    </th>
+                                    <th>
+                                        Estimate
+                                    </th>
+                                    <th>
+                                        VOD
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(content, j) in item.content" :key="j">
+                                    <td>{{content.name}}</td>
+                                    <td>{{content.cat}}</td>
+                                    <td>{{content.estimate}}</td>
+                                    <td><a :href=content.vod>Link</a></td>
+                                </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
                 </v-tab-item>
             </v-tabs-items>
         </v-card>
@@ -69,12 +88,12 @@ export default Vue.extend({
         const userInfo = {}
         const loading = false
         const events = [
-            { name: 'event_a',  content: [
+            { name: 'event a',  content: [
                 {name: 'jogo 1', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'},
                 {name: 'jogo 2', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'},
                 {name: 'jogo 3', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'}
             ]},
-            { name: 'event_b',  content: [
+            { name: 'event b',  content: [
                 {name: 'jogo 1', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'},
                 {name: 'jogo 2', cat: 'any %', estimate: 'xx:xx:xx', vod: 'http://youtube.com'}
             ]}

@@ -66,13 +66,13 @@ export default Vue.extend({
 
 <style>
 
-.v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: .5;
-  position: absolute;
-  width: 100%;
+.row{
+    justify-content: space-evenly;
+}
+
+.v-card {
+    margin: auto;
+    max-width: 400px;
 }
 
 .card-gradient-color{

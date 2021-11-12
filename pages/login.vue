@@ -39,6 +39,9 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  middleware: [
+    'guestOnly'
+  ],
   data() {
     const valid:boolean = false
     const showPass:boolean = false

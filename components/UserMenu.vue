@@ -44,7 +44,7 @@ export default Vue.extend({
         logout(){
             this.$store.dispatch('userSettings/logout')
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-            return this.$router.push('/')
+            return this.$nuxt.$options.router?.push('/')
         }
     },
     watch: {
