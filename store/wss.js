@@ -20,7 +20,9 @@ export const state = () => ({
 export const getters = {
     schedule: state => state.schedule,
     userList: state => state.userList,
-    curReq: state => state.curReq
+    curReq: state => state.curReq,
+    eventsList: state => state.eventsList,
+    eventRunsList: state => state.eventRunsList
 }
 
 export const mutations= {

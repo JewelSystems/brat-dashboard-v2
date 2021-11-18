@@ -39,9 +39,6 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  middleware: [
-    'guestOnly'
-  ],
   data() {
     const valid:boolean = false
     const showPass:boolean = false
@@ -55,10 +52,17 @@ export default Vue.extend({
       loginData
     }
   },
+  created () {
+    if(process.browser){
+        const ls = localStorage.getItem("brat_vuex")
+        const key = JSON.parse(ls)
+        return key.userSettings.auth === true ? this.$nuxt.$options.router?.push('/') : ''
+    }
+  },
   methods: {
     async login(){
-      const username = this.loginData.username
-      const password = this.loginData.password
+      const username = this.$data.loginData.username
+      const password = this.$data.loginData.password
       const loggedIn = await this.$store.dispatch('userSettings/login', { username, password })
       if (loggedIn.error){
         // return console.log(loggedIn)

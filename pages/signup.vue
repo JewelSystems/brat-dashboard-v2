@@ -154,9 +154,6 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
-    middleware: [
-    'guestOnly'
-  ],
   data() {
     const valid: boolean = false
     const showPass: boolean = false
@@ -196,32 +193,39 @@ export default Vue.extend({
   watch: {
     'registerData.phone_number' (newPhone): string {
       if (newPhone.length > 16 ) {
-        return (this.phoneMask = '+##(##)#####-####')
+        return (this.$data.phoneMask = '+##(##)#####-####')
       }
       else{
-        return (this.phoneMask = '+##(##)####-####')
+        return (this.$data.phoneMask = '+##(##)####-####')
       }
+    }
+  },
+  mounted () {
+    if(process.browser){
+        const ls = localStorage.getItem("brat_vuex")
+        const key = JSON.parse(ls)
+        return key.userSettings.auth === true ? this.$nuxt.$options.router?.push('/') : ''
     }
   },
   methods: {
     async submit(){
-      this.registerData.twitch = this.registerData.stream_link
+      this.$data.registerData.twitch = this.$data.registerData.stream_link
       const response = await this.$axios.$post('/user', {
-        first_name: this.registerData.first_name,
-        last_name: this.registerData.last_name,
-        username: this.registerData.username,
-        nickname: this.registerData.nickname,
-        email: this.registerData.email,
-        gender: this.registerData.gender,
-        birthday: this.registerData.birthday,
-        phone_number: this.registerData.phone_number,
-        password: this.registerData.password1,
-        stream_link: this.registerData.stream_link,
-        twitch: this.registerData.twitch,
-        twitter: this.registerData.twitter,
-        facebook: this.registerData.facebook,
-        instagram: this.registerData.instagram,
-        youtube: this.registerData.youtube,
+        first_name: this.$data.registerData.first_name,
+        last_name: this.$data.registerData.last_name,
+        username: this.$data.registerData.username,
+        nickname: this.$data.registerData.nickname,
+        email: this.$data.registerData.email,
+        gender: this.$data.registerData.gender,
+        birthday: this.$data.registerData.birthday,
+        phone_number: this.$data.registerData.phone_number,
+        password: this.$data.registerData.password1,
+        stream_link: this.$data.registerData.stream_link,
+        twitch: this.$data.registerData.twitch,
+        twitter: this.$data.registerData.twitter,
+        facebook: this.$data.registerData.facebook,
+        instagram: this.$data.registerData.instagram,
+        youtube: this.$data.registerData.youtube,
       } ).catch(function(error){
         if (error.response){
           // console.log(error.response)

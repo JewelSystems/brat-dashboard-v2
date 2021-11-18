@@ -48,10 +48,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import {mapGetters} from 'vuex'
 export default Vue.extend({
     data (){
         const events = [
-            { id: 0, name: 'Event A', image: '/userAvatars/Redd.png', date_start: '00/00/00', date_end: '11/11/11', active: 'A' },
+            { id: 27, name: 'Event A', image: '/userAvatars/Redd.png', date_start: '00/00/00', date_end: '11/11/11', active: 'A' },
             { id: 1, name: 'Event B', image: '', date_start: '00/00/00', date_end: '11/11/11', active: 'A' },
             { id: 2, name: 'Event C', image: '/userAvatars/Redd.png', date_start: '00/00/00', date_end: '11/11/11', active: 'N' },
             { id: 3, name: 'Event D', image: '/userAvatars/Redd.png', date_start: '00/00/00', date_end: '11/11/11', active: 'A' },
@@ -60,7 +61,17 @@ export default Vue.extend({
         return{
             events
         }
-    }
+    },
+    computed: {
+        ...mapGetters('wss', [
+        'eventsList',
+        'curReq'
+        ]),
+     },
+    created(){
+        const wsPayload = {"endpoint":"getEvents", "id":this.curReq};
+        this.$store.commit('wss/SOCKET_SEND', wsPayload);
+    },
 })
 </script>
 
