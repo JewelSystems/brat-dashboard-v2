@@ -6,7 +6,7 @@
         max-width="1200px">
             <v-row no-gutters>
                 <v-col cols="12" md="4" >
-                    <v-img :src="'/userAvatars/'+userInfo.username+'.png' ? '/userAvatars/'+userInfo.username+'.png' : '/userAvatars/Redd.png' " height="100%" class="rounded-l-xl"></v-img>
+                    <v-img :src="'/userAvatars/'+userInfo.username+'.png' !== '/userAvatars/undefined.png' ? '/userAvatars/'+userInfo.username+'.png' : '/Brat_logo.png' " height="100%" class="rounded-l-xl"></v-img>
                 </v-col>
                 <v-col cols="12" md="6" align-self="center">
                     <v-card-title primary-title>
@@ -81,11 +81,14 @@ import Vue from 'vue'
 export default Vue.extend({
     asyncData ({params}){
         const userId = params.id
-        return {userId}
+        const userInfo = {}
+        return {
+            userId,
+            userInfo
+        }
     },
     data() {
         const tab = null
-        const userInfo = {}
         const loading = false
         const events = [
             { name: 'event a',  content: [
@@ -102,13 +105,12 @@ export default Vue.extend({
             tab,
             events,
             loading,
-            userInfo
         }
     },
     async fetch (){
         this.loading = true
         const fetchData = await this.$axios.$get('/user/'+this.$data.userId)
-        this.userInfo = fetchData.res[0]
+        this.$data.userInfo = fetchData.res[0]
         // console.log(this.userInfo)
         this.loading = false
     }

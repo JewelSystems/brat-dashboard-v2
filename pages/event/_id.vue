@@ -1,7 +1,7 @@
 <template>
     <v-card :loading="loading" class="mx-auto my-12" max-width="1200px">
         <v-img src="/userAvatars/Redd.png" max-height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" class="white--text align-end">
-            <v-card-title class="font-weight-bold text-h3">{{eventsList[eventIndex].name}}</v-card-title>
+            <v-card-title class="font-weight-bold text-h3">{{eventInfo.name}}</v-card-title>
         </v-img>
         <v-divider></v-divider>
         <v-card-title class="justify-center">
@@ -24,10 +24,15 @@ export default Vue.extend({
     },
     data () {
         const loading = false
-        const eventIndex = 0
+        const eventInfo:any = {
+            name: '',
+            donation_link: '',
+            start: '',
+            end: ''
+        }
 
         return {
-            eventIndex,
+            eventInfo,
             loading,
         }
     },
@@ -43,12 +48,12 @@ export default Vue.extend({
             const wsPayload = {"endpoint":"getEvents", "id":this.curReq}
             this.$store.commit('wss/SOCKET_SEND', wsPayload)
         }, 600);
-
+        
         this.$data.loading = false
     },
     mounted (){
         const index = this.$store.state.wss.eventsList.map((e: { id: number }) => e.id).indexOf(this.$data.eventId);
-        this.$data.eventIndex = this.eventsList[index]
+        this.eventInfo = this.eventsList[index]
     }
 })
 </script>

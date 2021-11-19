@@ -16,24 +16,11 @@
 
 <script>
 export default {
-  computed:{
-    dark: {
-      get () {
-        return this.$store.state.userSettings.bDarkMode
-      },
-    },
-  },
-  watch: {
-    dark (newDark) {
-      this.$vuetify.theme.dark = newDark
-    }
-  },
   mounted() {
     setTimeout(() => {
       const wsPayload = {"endpoint":"login", "id":this.$store.state.userSettings.userData.id, "info":{"token": this.$store.state.userSettings.userData.jwt}};
       this.$store.commit('wss/SOCKET_SEND', wsPayload);
     }, 300);
-    
   }
 }
 </script>

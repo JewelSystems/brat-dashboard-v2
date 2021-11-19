@@ -1,16 +1,27 @@
-// eslint-disable-next-line import/no-named-as-default
-import * as Cookies from 'js-cookie'
-import cookie from 'cookie'
-import VuexPersistence from 'vuex-persist';
+import createPersistedState from 'vuex-persistedstate';
+import * as Cookies from 'js-cookie';
+import cookie from 'cookie';
 
-export default ({ store, req, isDev }) => {
-  window.onNuxtReady(() => {
-    new VuexPersistence({
-      key: 'brat_vuex',
-      modules: ['userSettings'],
-      restoreState: (key, storage) =>process.client ? Cookies.getJSON(key) : cookie.parse(req.headers.cookie||'')[key],
-      saveState: (key, state, storage) =>
-      Cookies.set(key, value, { expires: 365, secure: !isDev }),
-    }).plugin(store);
-  });
+export default ({ store, req,}) => {
+
+    createPersistedState({
+        paths: ['userSettings'],
+        key: 'brat_vuex',
+        storage: {
+            getItem: (key) => {
+                // See https://nuxtjs.org/guide/plugins/#using-process-flags
+                if (process.server) {
+                    const parsedCookies = cookie.parse(req.headers.cookie);
+                    return parsedCookies[key];
+                } else {
+                    return Cookies.get(key);
+                }
+            },
+            // Please see https://github.com/js-cookie/js-cookie#json, on how to handle JSON.
+            setItem: (key, value) =>
+                Cookies.set(key, value, { expires: 365, secure: false }),
+            removeItem: key => Cookies.remove(key)
+        },
+        fetchBeforeUse: true,
+    })(store);
 };

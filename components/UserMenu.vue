@@ -12,8 +12,8 @@
             </v-card>
         </template>
             <v-list>
-                <v-list-item-group v-for="(item, i) in userRoutes" :key="i">
-                    <v-list-item :to="item.route">{{item.name}}</v-list-item>
+                <v-list-item-group v-for="(item, i) in routes" :key="i">
+                    <v-list-item v-if="item.auth === auth" :to="item.route">{{item.name}}</v-list-item>
                 </v-list-item-group>
                 <v-list-item-group>
                     <v-list-item v-if="auth" @click.stop="logout">Logout</v-list-item>
@@ -28,12 +28,13 @@ import {mapGetters} from 'vuex'
 
 export default Vue.extend({
     data () {
-        const userRoutes = [
-            {name: 'Login', route: '/login'},
-            {name: 'Registro', route: '/signup'}
-        ]
+            const routes = [
+                {name: 'Login', route: '/login', auth: false},
+                {name: 'Registro', route: '/signup', auth: false},
+                {name: 'Perfil', route: '/user/'+this.$store.state.userSettings.userData.id, auth: true },
+            ]
         return{
-            userRoutes
+            routes
         }
     },
     computed:{
@@ -47,20 +48,5 @@ export default Vue.extend({
             return this.$nuxt.$options.router?.push('/')
         }
     },
-    watch: {
-        auth(newAuth){
-            if (newAuth) {
-                this.$data.userRoutes = [
-                    {name: 'Perfil', route: '/user/'+this.userData.id },
-                ]
-            }
-            else{
-                this.$data.userRoutes = [
-                    {name: 'Login', route: '/login'},
-                    {name: 'Registro', route: '/signup'}
-                ]
-            }
-        }
-    }
 })
 </script>

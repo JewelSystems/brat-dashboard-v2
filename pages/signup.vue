@@ -200,13 +200,6 @@ export default Vue.extend({
       }
     }
   },
-  mounted () {
-    if(process.browser){
-        const ls = localStorage.getItem("brat_vuex")
-        const key = JSON.parse(ls)
-        return key.userSettings.auth === true ? this.$nuxt.$options.router?.push('/') : ''
-    }
-  },
   methods: {
     async submit(){
       this.$data.registerData.twitch = this.$data.registerData.stream_link

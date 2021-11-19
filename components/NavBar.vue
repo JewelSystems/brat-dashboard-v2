@@ -53,14 +53,14 @@ export default Vue.extend({
   },
   computed:{
     ...mapGetters("userSettings", [
-            'userData',
-            'auth'
-        ]),
-        logout(){
-            this.$store.dispatch('userSettings/logout')
-            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-            return this.$nuxt.$options.router?.push('/')
-        },
+      'userData',
+      'auth'
+    ]),
+    logout() {
+      this.$store.dispatch('userSettings/logout')
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        return this.$nuxt.$options.router?.push('/')
+    },
     dark: {
       get () {
         return this.$store.state.userSettings.bDarkMode
@@ -69,6 +69,11 @@ export default Vue.extend({
         this.$store.commit('userSettings/setDarkMode', i)
       }
     },
+  },
+  watch: {
+    dark (newDark) {
+      this.$vuetify.theme.dark = newDark
+    }
   },
 })
 </script>
