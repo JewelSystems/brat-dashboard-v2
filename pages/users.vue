@@ -16,7 +16,7 @@
         >
             <!--eslint-disable-next-line vue/valid-v-slot-->
             <template #item.avatar="{item}">
-                <v-img :src="item.avatar !== null ? parseAvatar(item.avatar) : '/Brat_logo.png' " class="fill-height image-mask" :aspect-ratio="1.77" max-height="48px">
+                <v-img :src="item.avatar !== null ? parseAvatar(item.avatar) : '/Brat_logo.png' " class="fill-height image-mask" :aspect-ratio="1.77" max-height="60px">
                 </v-img>
             </template>
         </v-data-table>
@@ -33,7 +33,7 @@ export default Vue.extend({
         const connected = 0
 
         const header = [
-            {text: '', value: 'avatar', sortable: false, filterable: false, cellClass: 'tableAvatar'},
+            {text: '', value: 'avatar', sortable: false, filterable: false, cellClass: 'tableAvatar', width: '144'},
             {text: 'Usuário', value: 'username', cellClass: 'tableUser'},
         ]
 
@@ -80,7 +80,7 @@ export default Vue.extend({
 
 .image-mask{
     opacity: 100%;
-    --l1: linear-gradient(120deg, red 0 30%, transparent 80% 100%);
+    --l1: linear-gradient(120deg, red 0 40%, transparent 80% 100%);
     mask: var(--l1);
 }
 

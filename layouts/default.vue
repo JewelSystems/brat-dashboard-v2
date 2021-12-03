@@ -20,7 +20,7 @@ export default {
     setTimeout(() => {
       const wsPayload = {"endpoint":"login", "id":this.$store.state.userSettings.userData.id, "info":{"token": this.$store.state.userSettings.userData.jwt}};
       this.$store.commit('wss/SOCKET_SEND', wsPayload);
-    }, 300);
+    }, 1);
   },
 }
 </script>

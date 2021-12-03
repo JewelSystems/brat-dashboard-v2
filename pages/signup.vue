@@ -271,7 +271,7 @@ export default Vue.extend({
     text-align: center;
     cursor: pointer;
     display: flex;
-    justify-content: center;
+    align-items: center;
 }
 
 .image-overlay:not(.on-hover){

@@ -19,7 +19,8 @@ export type UserSettingsModuleState = ReturnType<typeof state>
 export const getters: GetterTree <UserSettingsModuleState, UserSettingsModuleState> = {
     auth: state => state.auth,
     userData: state => state.userData,
-    bDarkMode: state => state.bDarkMode
+    bDarkMode: state => state.bDarkMode,
+    isAdmin: state => state.isAdmin
 }
 
 export const mutations: MutationTree <UserSettingsModuleState> = {
@@ -36,6 +37,7 @@ export const mutations: MutationTree <UserSettingsModuleState> = {
     },
     logout (state){
         state.auth = false
+        state.isAdmin = false
         state.userData = {
             username: 'convidado',
             jwt: '',

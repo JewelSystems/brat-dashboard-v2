@@ -1,8 +1,19 @@
 export default function websocket({store}){
-  const wss = new WebSocket(process.env.WS_BASE_URL || 'ws://localhost:3001');
+  function connect(){
+    return new Promise(function(resolve, reject) {
+      const wss = new WebSocket(process.env.WS_BASE_URL || 'ws://localhost:3001');
+      wss.onopen = function (){
+        resolve (wss)
+      }
+      wss.onerror = function(err){
+        reject(err)
+      }
+    })
+  }
+  connect().then( wss => {
     wss.addEventListener('message', function (event){
       const payload = JSON.parse(event.data);
-      console.log(payload)
+      // console.log(payload)
       switch(payload.endpoint){
           case "getUsers":
             store.commit('wss/listUsers', payload.data);
@@ -112,8 +123,9 @@ export default function websocket({store}){
     store.subscribe(mutation => {
       if (mutation.type === 'wss/SOCKET_SEND') {
         store.commit('wss/wsState', wss.readyState);
-        console.log(JSON.stringify(mutation.payload))
+        // console.log(JSON.stringify(mutation.payload))
         wss.send(JSON.stringify(mutation.payload))
       }
     })
+  })
 }

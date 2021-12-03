@@ -46,7 +46,7 @@ export default Vue.extend({
         setTimeout(() => {
             const wsPayload = {"endpoint":"getEvent", "id":this.curReq, "info": { "id" : this.$data.eventId }}
             this.$store.commit('wss/SOCKET_SEND', wsPayload)
-        }, 500);
+        }, 50);
     },
     mounted() {
         this.$root.$on("listEvent",  (payload:any) => {

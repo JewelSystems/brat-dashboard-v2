@@ -16,6 +16,7 @@
                     <v-list-item v-if="item.auth === auth" :to="item.route">{{item.name}}</v-list-item>
                 </v-list-item-group>
                 <v-list-item-group>
+                    <v-list-item v-if="isAdmin" to="/admin">Administração</v-list-item>
                     <v-list-item v-if="auth" @click.stop="logout">Logout</v-list-item>
                 </v-list-item-group>
             </v-list>
@@ -34,7 +35,8 @@ export default Vue.extend({
     computed:{
         ...mapGetters("userSettings", [
             'userData',
-            'auth'
+            'auth',
+            'isAdmin'
         ]),
         routes(){
             const routes = [

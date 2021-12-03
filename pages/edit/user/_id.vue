@@ -31,7 +31,7 @@
         label="E-mail"
         :rules="[
           v => !!v || 'Email não pode estar vazio!',
-          v => /.+@.+\..+/.test(v) || 'E-mail precisa ter um formato válido (ex:fulano@provedor.cdn)',
+          v => /.+@.+\..+/.test(v) || 'E-mail precisa ter um formato válido (ex:fulano@provedor.com)',
         ]"
         required
         class="mx-8"
@@ -236,12 +236,12 @@ export default Vue.extend({
     transition: opacity .2s ease-in-out;
     opacity: 100%;
     background-image: linear-gradient(to top right, rgba(97, 200, 98,.33), rgba(25,32,72,.8));
-    max-height: "100px";
-    max-width: "100px";
+    max-height: 100px;
+    max-width: 100px;
     text-align: center;
     cursor: pointer;
     display: flex;
-    justify-content: center;
+    align-items: center;
 }
 
 .image-overlay:not(.on-hover){

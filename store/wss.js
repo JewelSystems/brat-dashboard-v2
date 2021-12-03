@@ -161,8 +161,8 @@ export const mutations= {
         }
         state.schedule = payload;
     },
-    SOCKET_SEND(state, message){
-        console.log('message sent: ' + message);
+    SOCKET_SEND(state){
+        // console.log('message sent: ' + message);
         state.curReq++;
     },
     wsState(state, curState){

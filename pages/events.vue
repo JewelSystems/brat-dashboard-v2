@@ -6,7 +6,7 @@
                 <v-col v-if="event.active === 'A'" :key="event.id" cols="12" md="4">
                     <v-hover v-slot="{ hover }">
                         <v-card class="rounded-t-lg event-card" :elevation="hover ? 4 : 1" :to="'/event/'+event.id">
-                                <v-img :src="event.image != '' ? event.image : '/BrAT_logo.png' " class="rounded-t-lg" max-height="70px">
+                                <v-img :src="event.image != null ? parseImage(event.image) : '/BrAT_logo.png' " class="rounded-t-lg" max-height="70px">
                                     <div class="fill-height card-gradient-color" :class="{'on-hover': hover}"></div>
                                 </v-img>
                             <v-divider></v-divider>
@@ -14,7 +14,7 @@
                                 {{event.name}}
                             </v-card-title>
                             <v-card-subtitle>
-                                De {{event.date_start}} à {{event.date_end}}
+                                De {{event.start}} à {{event.end}}
                             </v-card-subtitle>
                         </v-card>
                     </v-hover>
@@ -28,7 +28,7 @@
                 <v-col v-if="event.active === 'N'" :key="event.id" cols="12" md="4">
                     <v-hover v-slot="{ hover }">
                         <v-card class="rounded-t-lg" :elevation="hover ? 4 : 1" :to="'/event/'+event.id">
-                                <v-img :src="event.image != '' ? event.image : '/BrAT_logo.png' " class="rounded-t-lg" style="filter: grayscale(100%);" max-height="70px">
+                                <v-img :src="event.image != null ? parseImage(event.image) : '/BrAT_logo.png' " class="rounded-t-lg" style="filter: grayscale(100%);" max-height="70px">
                                     <div class="fill-height card-gradient-color" :class="{'on-hover': hover}"></div>
                                 </v-img>
                             <v-divider></v-divider>
@@ -51,13 +51,7 @@ import Vue from 'vue'
 import {mapGetters} from 'vuex'
 export default Vue.extend({
     data (){
-        const events = [
-            { id: 27, name: 'Event A', image: '/userAvatars/Redd.png', date_start: '00/00/00', date_end: '11/11/11', active: 'A' },
-            { id: 1, name: 'Event B', image: '', date_start: '00/00/00', date_end: '11/11/11', active: 'A' },
-            { id: 2, name: 'Event C', image: '/userAvatars/Redd.png', date_start: '00/00/00', date_end: '11/11/11', active: 'N' },
-            { id: 3, name: 'Event D', image: '/userAvatars/Redd.png', date_start: '00/00/00', date_end: '11/11/11', active: 'A' },
-            { id: 4, name: 'Event F', image: '', date_start: '00/00/00', date_end: '11/11/11', active: 'N' },
-        ]
+        const events: any[] = []
         return{
             events
         }
@@ -68,11 +62,22 @@ export default Vue.extend({
         'curReq'
         ]),
      },
+     watch: {
+         'eventsList' (newList){
+             this.$data.events = newList
+         }
+     },
     created(){
         setTimeout(() => {
             const wsPayload = {"endpoint":"getEvents", "id":this.curReq};
             this.$store.commit('wss/SOCKET_SEND', wsPayload);
-        }, 600)
+        }, 50)
+    },
+    methods: {
+        parseImage(c: string){
+            const i = (process.env.BASE_URL || 'http://localhost:3001') + '/cdn/images/' + c
+            return i
+        }
     },
 })
 </script>
