@@ -1,4 +1,4 @@
-<template>
+<template v-on:listEvent="listEvent">
     <v-card :loading="loading" class="mx-auto my-12" max-width="1200px">
         <v-img src="/userAvatars/Redd.png" max-height="200px" gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" class="white--text align-end">
             <v-card-title class="font-weight-bold text-h3">{{eventInfo.name}}</v-card-title>
@@ -43,17 +43,15 @@ export default Vue.extend({
         ]),
      },
     created(){
-        this.$data.loading = true
         setTimeout(() => {
-            const wsPayload = {"endpoint":"getEvents", "id":this.curReq}
+            const wsPayload = {"endpoint":"getEvent", "id":this.curReq, "info": { "id" : this.$data.eventId }}
             this.$store.commit('wss/SOCKET_SEND', wsPayload)
-        }, 600);
-        
-        this.$data.loading = false
+        }, 500);
     },
-    mounted (){
-        const index = this.$store.state.wss.eventsList.map((e: { id: number }) => e.id).indexOf(this.$data.eventId);
-        this.eventInfo = this.eventsList[index]
+    mounted() {
+        this.$root.$on("listEvent",  (payload:any) => {
+            this.eventInfo = payload[0]
+        })
     }
 })
 </script>

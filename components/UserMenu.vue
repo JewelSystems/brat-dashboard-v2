@@ -6,7 +6,7 @@
                     {{userData.username}}
                 </v-card-text>
                 <v-avatar color="green" size="30" style="margin: 5px">
-                    <img v-if="userData.image != ''" :src="userData.image" alt="">
+                    <img v-if="userData.image != null" :src="userData.image" alt="">
                     <v-icon v-else>mdi-account-circle</v-icon>
                 </v-avatar>
             </v-card>
@@ -28,13 +28,7 @@ import {mapGetters} from 'vuex'
 
 export default Vue.extend({
     data () {
-            const routes = [
-                {name: 'Login', route: '/login', auth: false},
-                {name: 'Registro', route: '/signup', auth: false},
-                {name: 'Perfil', route: '/user/'+this.$store.state.userSettings.userData.id, auth: true },
-            ]
         return{
-            routes
         }
     },
     computed:{
@@ -42,11 +36,21 @@ export default Vue.extend({
             'userData',
             'auth'
         ]),
+        routes(){
+            const routes = [
+                {name: 'Perfil', route: '/user/'+this.userData.id, auth: true },
+                {name: 'Login', route: '/login', auth: false},
+                {name: 'Registro', route: '/signup', auth: false},
+            ]
+            return routes
+        }
+    },
+    methods: {
         logout(){
             this.$store.dispatch('userSettings/logout')
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             return this.$nuxt.$options.router?.push('/')
         }
-    },
+    }
 })
 </script>

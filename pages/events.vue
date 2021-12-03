@@ -1,11 +1,11 @@
 <template>
     <div>
         <h1>Eventos Ativos</h1>
-        <v-row>
+        <v-row class="event-row">
             <template v-for="event in events">
                 <v-col v-if="event.active === 'A'" :key="event.id" cols="12" md="4">
                     <v-hover v-slot="{ hover }">
-                        <v-card class="rounded-t-lg" :elevation="hover ? 4 : 1" :to="'/event/'+event.id">
+                        <v-card class="rounded-t-lg event-card" :elevation="hover ? 4 : 1" :to="'/event/'+event.id">
                                 <v-img :src="event.image != '' ? event.image : '/BrAT_logo.png' " class="rounded-t-lg" max-height="70px">
                                     <div class="fill-height card-gradient-color" :class="{'on-hover': hover}"></div>
                                 </v-img>
@@ -23,7 +23,7 @@
         </v-row>
         <v-divider class="my-5"></v-divider>
         <h1>Eventos Finalizados</h1>
-        <v-row>
+        <v-row class="event-row">
             <template v-for="event in events">
                 <v-col v-if="event.active === 'N'" :key="event.id" cols="12" md="4">
                     <v-hover v-slot="{ hover }">
@@ -69,19 +69,21 @@ export default Vue.extend({
         ]),
      },
     created(){
-        const wsPayload = {"endpoint":"getEvents", "id":this.curReq};
-        this.$store.commit('wss/SOCKET_SEND', wsPayload);
+        setTimeout(() => {
+            const wsPayload = {"endpoint":"getEvents", "id":this.curReq};
+            this.$store.commit('wss/SOCKET_SEND', wsPayload);
+        }, 600)
     },
 })
 </script>
 
 <style>
 
-.row{
+.event-row {
     justify-content: space-evenly;
 }
 
-.v-card {
+.event-card {
     margin: auto;
     max-width: 400px;
 }

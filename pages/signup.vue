@@ -7,7 +7,16 @@
       </div>
       <v-spacer />
     </v-card-title>
-    <v-form ref="signUpForm" v-model="valid" lazy-validation @submit="submit">
+    <v-form ref="signUpForm" v-model="valid" lazy-validation>
+      <v-row>
+          <v-btn v-if="image.croppedImageURI === null" large class="mx-auto" @click.stop="showCrop=true">Upload Avatar</v-btn>
+          <v-img v-else :src="image.croppedImageURI" contain class="mx-auto" max-height="100px" max-width="100px" @click.stop="showCrop=true">
+            <v-hover v-slot="{ hover }">
+              <div class="fill-height image-overlay white--text" :class="{'on-hover': hover}"><h3>Mudar avatar</h3></div>
+            </v-hover>
+          </v-img>
+      </v-row>
+      <AvatarCropper v-model="showCrop" @getCrop="getCrop" />
       <v-text-field
         v-model="registerData.username"
         label="Usuário"
@@ -146,7 +155,7 @@
     <v-card-actions>
       <v-btn text color="primary" :to="'/login'">Login</v-btn>
       <v-spacer />
-      <v-btn color="primary" :disabled="!valid" type="submit">Cadastrar</v-btn>
+      <v-btn color="primary" :disabled="!valid" @click="submit">Cadastrar</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -154,10 +163,22 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  middleware:['guestsOnly'],
   data() {
     const valid: boolean = false
     const showPass: boolean = false
     const phoneMask: string = '+##(##)####-####'
+    const showCrop: boolean = false
+    const image = {
+      cropCoords: null,
+      croppedFile: null,
+      croppedImageURI: null,
+      filename: null,
+      flippedH: null,
+      flippedV: null,
+      originalFile: null,
+      rotation: null,
+    }
     const registerData = {
       first_name: '',
       last_name: '',
@@ -183,6 +204,8 @@ export default Vue.extend({
         { text: 'Outro', value: 'O' }
       ]
     return{
+      image,
+      showCrop,
       phoneMask,
       valid,
       showPass,
@@ -203,6 +226,7 @@ export default Vue.extend({
   methods: {
     async submit(){
       this.$data.registerData.twitch = this.$data.registerData.stream_link
+      
       const response = await this.$axios.$post('/user', {
         first_name: this.$data.registerData.first_name,
         last_name: this.$data.registerData.last_name,
@@ -213,6 +237,7 @@ export default Vue.extend({
         birthday: this.$data.registerData.birthday,
         phone_number: this.$data.registerData.phone_number,
         password: this.$data.registerData.password1,
+        avatar: this.$data.image.croppedImageURI,
         stream_link: this.$data.registerData.stream_link,
         twitch: this.$data.registerData.twitch,
         twitter: this.$data.registerData.twitter,
@@ -221,13 +246,35 @@ export default Vue.extend({
         youtube: this.$data.registerData.youtube,
       } ).catch(function(error){
         if (error.response){
-          // console.log(error.response)
+          // eslint-disable-next-line no-console
+          console.log(error.response)
           return error.response
         }
       })
       // console.log(response)
       return response
+    },
+    getCrop (payload: any){
+      this.$data.image = payload
     }
   }
 })
 </script>
+
+<style>
+.image-overlay{
+    transition: opacity .2s ease-in-out;
+    opacity: 100%;
+    background-image: linear-gradient(to top right, rgba(97, 200, 98,.33), rgba(25,32,72,.8));
+    max-height: "100px";
+    max-width: "100px";
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.image-overlay:not(.on-hover){
+    opacity: 0%;
+}
+</style>

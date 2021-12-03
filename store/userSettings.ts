@@ -4,11 +4,12 @@ import { MutationTree, ActionTree, GetterTree } from 'vuex'
 export const state = () => ({
     bDarkMode: true,
     auth: false,
+    isAdmin: false,
     userData: {
         username: 'convidado',
         jwt: '',
         id:'',
-        image: '',
+        image: null,
     },
 
 })
@@ -27,9 +28,11 @@ export const mutations: MutationTree <UserSettingsModuleState> = {
     },
     setCredentials (state, e) {
         state.auth = true
+        state.isAdmin = e.admin
         state.userData.id = e.id
         state.userData.jwt = e.token
         state.userData.username = e.username
+        state.userData.image = e.image
     },
     logout (state){
         state.auth = false
@@ -37,7 +40,7 @@ export const mutations: MutationTree <UserSettingsModuleState> = {
             username: 'convidado',
             jwt: '',
             id:'',
-            image: '',
+            image: null,
         }
     }
 }
@@ -52,13 +55,17 @@ export const actions: ActionTree <UserSettingsModuleState, UserSettingsModuleSta
                 return error.response;
             }
         });
-        // console.log(response)
+        console.log(response)
         const user = await this.$axios.$get('/user/'+response.id)
+        const parsedImage = user.res[0].avatar != null ? process.env.BASE_URL || 'http://localhost:3001' + '/cdn/images/'+user.res[0].avatar : null
+        const isAdmin = user.res[0].permissions.split(',').includes('Admin') 
 
         const data ={
             id: response.id,
+            admin: isAdmin,
             token: response.token,
-            username: user.res[0].username
+            username: user.res[0].username,
+            image: parsedImage
         }
         commit('setCredentials', data)
 

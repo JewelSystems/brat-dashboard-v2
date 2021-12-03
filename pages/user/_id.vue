@@ -2,11 +2,12 @@
     <div>
         <v-card
         :loading="loading"
-        class="mx-auto my-12 rounded-l-xl"
+        class="mx-auto my-12"
         max-width="1200px">
+            <v-btn v-if="userId === userData.id " fab absolute right class="mt-2" :to="'/edit/user/' + userId"><v-icon>mdi-pencil-outline</v-icon></v-btn>
             <v-row no-gutters>
                 <v-col cols="12" md="4" >
-                    <v-img :src="'/userAvatars/'+userInfo.username+'.png' !== '/userAvatars/undefined.png' ? '/userAvatars/'+userInfo.username+'.png' : '/Brat_logo.png' " height="100%" class="rounded-l-xl"></v-img>
+                    <v-img :src="userInfo.avatar !== null ? parseAvatar() : '/Brat_logo.png' " height="100%" class="rounded"></v-img>
                 </v-col>
                 <v-col cols="12" md="6" align-self="center">
                     <v-card-title primary-title>
@@ -78,6 +79,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import {mapGetters} from 'vuex'
+
 export default Vue.extend({
     asyncData ({params}){
         const userId = params.id
@@ -108,11 +111,20 @@ export default Vue.extend({
         }
     },
     async fetch (){
-        this.loading = true
         const fetchData = await this.$axios.$get('/user/'+this.$data.userId)
         this.$data.userInfo = fetchData.res[0]
         // console.log(this.userInfo)
-        this.loading = false
+    },
+    computed: {
+        ...mapGetters('userSettings',[
+            'userData'
+        ])
+    },
+    methods: {
+        parseAvatar (){
+            const i = (process.env.BASE_URL || 'http://localhost:3001') + '/cdn/images/' + this.$data.userInfo.avatar
+            return i
+        }
     }
 })
 </script>

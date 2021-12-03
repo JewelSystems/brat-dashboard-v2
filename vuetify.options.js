@@ -8,6 +8,9 @@ export default {
         current: 'pt',
     },
     theme: {
+        options: {
+            customProperties: true,
+        },
         dark: true,
         themes: {
             dark: {
@@ -17,12 +20,13 @@ export default {
                 info: colors.teal.lighten1,
                 warning: colors.amber.base,
                 error: colors.deepOrange.accent4,
-                success: colors.green.accent3
+                success: colors.green.accent3,
             },
             light: {
                 primary: colors.green.darken1, // #E53935
                 secondary: colors.red.lighten4, // #FFCDD2
                 accent: colors.indigo.base, // #3F51B5
+                background: '#fff'
             },
         }
     }

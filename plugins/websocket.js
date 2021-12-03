@@ -14,6 +14,9 @@ export default function websocket({store}){
           case "getEvents":
             store.commit('wss/listEvents', payload.data);
             break;
+          case "getEvent":
+            $nuxt.$emit('listEvent', payload.data);
+            break;
           case "updateEventState":
             store.commit('wss/updateEventState', payload.data);
             break;

@@ -1,3 +1,5 @@
+import colors from 'vuetify/es5/util/colors';
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -17,6 +19,14 @@ export default {
     ]
   },
 
+  ssr: false,
+
+  loadingIndicator: {
+    name: 'fading-circle',
+    color: colors.green.darken2,
+    background: 'white'
+  },
+
   layoutTransition: 'transition',
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -27,9 +37,9 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     {src: '~/plugins/vuex-persist'},
-    {src: '~/plugins/websocket', ssr: false},
+    {src: '~/plugins/websocket', mode: 'client'},
     {src: '~/plugins/v-mask.js', ssr:true},
-    {src: '~/plugins/loadState.js', ssr:false}
+    {src: '~/plugins/loadState.js', mode: 'client'}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -66,7 +76,7 @@ export default {
   
   publicRuntimeConfig: {
     axios: {
-      browserBaseURL: process.env.BROWSER_BASE_URL
+      browserBaseURL: process.env.BASE_URL
     }
   },
 

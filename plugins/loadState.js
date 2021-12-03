@@ -5,6 +5,6 @@ export default ({store, $vuetify}) => {
         if (mutation === 'base state')
             // if I remove this log the code stops functioning and I have no idea why
             console.log(state)
-            return ($vuetify.theme.dark = state.userSettings.bDarkMode)
+            $vuetify.theme.dark = state.userSettings.bDarkMode
     })
 }
